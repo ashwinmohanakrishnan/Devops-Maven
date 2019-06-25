@@ -63,13 +63,13 @@ pipeline {
 	         steps{
 	             script {
 				  // Push to Artifactory
-				  def server = Artifactory.server "VM1-Artifactory"
+				  def server = Artifactory.server "Artifactory"
 			
 				  def uploadSpec = """{
 					"files": [
 					  {
 						"pattern": "target/*.war",
-						"target": "Prasanna/${env.BUILD_NUMBER}/"
+						"target": "ashwin-maven-war/${env.BUILD_NUMBER}/"
 					  }
 					]
 				  }"""
