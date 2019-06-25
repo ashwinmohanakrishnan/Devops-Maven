@@ -2,13 +2,13 @@ pipeline {
 	    agent any
 	    environment {
 	        branch = 'master'
-	        scmUrl = ' https://github.com/prasanna0077/mvc-app.git'
+	        scmUrl = 'https://github.com/ashwinmohanakrishnan/Devops-maven.git'
 	        serverPort = '8080'
 	        scannerHome = tool 'sonar'
 	        developmentServer = 'dev-myproject.mycompany.com'
 	        stagingServer = 'staging-myproject.mycompany.com'
 	        productionServer = 'production-myproject.mycompany.com'
-		deploymentuser = credentials('deploymentuser')
+		//deploymentuser = credentials('deploymentuser')
 	    }
 	    
 	    tools {
@@ -17,7 +17,7 @@ pipeline {
 	    stages {
 	        stage('checkout git') {
 	            steps {
-	                git branch: branch, credentialsId: 'Git', url: scmUrl
+	                git branch: branch, credentialsId: 'git', url: scmUrl
 	            }
 	        }
 			stage('build') {
@@ -82,13 +82,13 @@ pipeline {
 			 steps{
 				 script {
 				  // Pull to Artifactory
-				  def server = Artifactory.server "VM1-Artifactory"
+				  def server = Artifactory.server "Artifactory"
 
 				  def downloadSpec = """{
 					"files": [
 					  {
-						"pattern": "Prasanna/${env.BUILD_NUMBER}/*.war",
-						"target": "artifacts/"
+						"pattern": "ashwin-maven-war/${env.BUILD_NUMBER}/*.war",
+						"target": "artifact/"
 					  }
 					]
 				  }"""
@@ -100,14 +100,14 @@ pipeline {
 		   stage('Deploy War to Tomcat') {
 			    steps {
 				echo 'Deploying....'
-				sh "scp ./artifacts/${env.BUILD_NUMBER}/SpringMVCHibernate.war ${deploymentuser}:/home/minduseradmin/Docker"
+				sh "scp ./artifact/${env.BUILD_NUMBER}/SpringMVCHibernate.war ${deploymentuser}:/home/ubuntulogin/Docker"
 			    }
 			}
 		}
 	post {
 		failure 
 		{
-			mail to: 'prasanna.rajasekaran@mindtree.com', subject: 'Pipeline failed', body: "${env.BUILD_URL}"
+			mail to: 'example@mindtree.com', subject: 'Pipeline failed', body: "${env.BUILD_URL}"
 		}
 	}
 }
