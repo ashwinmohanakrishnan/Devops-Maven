@@ -1,0 +1,12 @@
+upstream backend {
+ server localhost:9001;
+ server localhost:9002;
+}
+
+server {
+ listen 80;
+ server_name $hostname;
+ location / {
+  proxy_pass http://backend;
+ }
+}
