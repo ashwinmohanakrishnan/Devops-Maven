@@ -1,0 +1,30 @@
+version: '2'
+services:
+  tomcat1: # name of the first service
+    image: tomcat # specify image to build container from
+    container_name: Tomcat1
+    volumes:
+- ./Docker/:/usr/local/tomcat/webapps/
+    ports:
+- "9001:8080" # specify port forwarding
+    depends_on :
+- database
+
+  tomcat2: # name of the first service
+    image: tomcat:9 # specify image to build container from
+    container_name: Tomcat2
+    volumes:
+- ./Docker/:/usr/local/tomcat/webapps/
+    ports:
+- "9002:8080" # specify port forwarding
+    depends_on :
+- database
+
+  database:
+    container_name: mysql
+    image: mysql:5.7
+    environment:
+MYSQL_DATABASE: spring
+MYSQL_ROOT_PASSWORD: password
+    ports:
+- "3306:3306"
